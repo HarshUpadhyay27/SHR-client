@@ -83,7 +83,7 @@ const Register = () => {
             type="email"
             className="form-control"
             id="exampleInputEmail1"
-            name="text"
+            name="email"
             value={email}
             onChange={handleChangeInput}
             style={{ background: `${alert.email ? "#fd2d6a14" : ""}` }}

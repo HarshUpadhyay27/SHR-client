@@ -59,14 +59,13 @@ export const refreshToken = () => async (dispatch) => {
 };
 
 export const register = (data) => async (dispatch) => {
+  const check = valid(data);
+  if (check.errLength > 0)
+    return dispatch({
+      type: GLOBALTYPES.ALERT,
+      payload: check.errMsg,
+    });
   try {
-    const check = valid(data);
-    if (check.errLength > 0)
-      return dispatch({
-        type: GLOBALTYPES.ALERT,
-        payload: check.errMsg,
-      });
-
     dispatch({
       type: GLOBALTYPES.ALERT,
       payload: { loading: true },
@@ -87,6 +86,21 @@ export const register = (data) => async (dispatch) => {
         success: res.data.msg,
       },
     });
+  } catch (error) {
+    dispatch({
+      type: GLOBALTYPES.ALERT,
+      payload: {
+        error: error.response.data.msg,
+      },
+    });
+  }
+};
+
+export const logout = () => async (dispatch) => {
+  try {
+    localStorage.removeItem("firstLogin");
+    await postDataApi('logout')
+    window.location.href = "/"
   } catch (error) {
     dispatch({
       type: GLOBALTYPES.ALERT,
