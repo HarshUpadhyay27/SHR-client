@@ -7,7 +7,7 @@ const Toast = ({ msg, handleShow, bgColor }) => {
       style={{ top: "5px", right: "5px", minWidth: "200px", zIndex: "50" }}
     >
       <div className={`toast-header text-light ${bgColor}`}>
-        <strong class="me-auto text-light">{msg.title}</strong>
+        <strong className="me-auto text-light">{msg.title}</strong>
         <button
           className="ml-2 mb-1 btn-close text-light"
           data-dismiss="toast"
