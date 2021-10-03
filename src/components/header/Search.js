@@ -1,31 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getDataApi } from "../../utils/fetchData";
 import { GLOBALTYPES } from "../../redux/actions/globalType";
-import { Link } from "react-router-dom";
 import UserCard from "../UserCard";
+import LoadIcon from "../../images/loading.gif";
 
 const Search = () => {
   const [search, setSearch] = useState("");
   const [users, setUsers] = useState([]);
+  const [load, setLoad] = useState(false);
 
   const { auth } = useSelector((state) => state);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (search) {
-      getDataApi(`search?username=${search}`, auth.token)
-        .then((res) => setUsers(res.data))
-        .catch((err) => {
-          dispatch({
-            type: GLOBALTYPES.ALERT,
-            payload: { error: err.response.data.msg },
-          });
-        });
-    }else{
-      setUsers([])
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (!search) return;
+    try {
+      setLoad(true);
+      const res = await getDataApi(`search?username=${search}`, auth.token);
+      setUsers(res.data);
+      setLoad(false);
+    } catch (err) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: err.response.data.msg },
+      });
     }
-  }, [search, auth.token, dispatch]);
+  };
 
   const handleClose = () => {
     setSearch("");
@@ -33,7 +35,7 @@ const Search = () => {
   };
 
   return (
-    <form className="search_form">
+    <form className="search_form" onSubmit={handleSearch}>
       <input
         type="text"
         name="search"
@@ -42,10 +44,11 @@ const Search = () => {
         onChange={(e) =>
           setSearch(e.target.value.toLowerCase().replace(/ /g, ""))
         }
+        title="Enter to search"
       />
       <div className="search_icon" style={{ opacity: search ? 0 : 0.5 }}>
         <span className="material-icons">search</span>
-        <span>Search</span>
+        <span>Enter to search</span>
       </div>
       <div
         className="close_search"
@@ -54,16 +57,20 @@ const Search = () => {
       >
         &times;
       </div>
+      {load && <img className="loading" src={LoadIcon} alt="loading" />}
+
+      <button type="submit" style={{ display: "none" }}></button>
+
       <div className="users">
-        {search && users.map((user) => (
-          <Link
-            key={user._id}
-            to={`/profile/${user._id}`}
-            onClick={handleClose}
-          >
-            <UserCard user={user} border="border" />
-          </Link>
-        ))}
+        {search &&
+          users.map((user) => (
+              <UserCard
+                user={user}
+                border="border"
+                key={user._id}
+                handleClose={handleClose}
+              />
+          ))}
       </div>
     </form>
   );
