@@ -14,7 +14,12 @@ export const imageUpload = async (images) => {
   let imgArr = [];
   for (const item of images) {
     const formData = new FormData();
-    formData.append("file", item);
+
+    if (item.camera) {
+      formData.append("file", item.camera);
+    } else {
+      formData.append("file", item);
+    }
 
     formData.append("upload_preset", "qn9asfzk");
     formData.append("cloud_name", "dfkq2jpbw");
