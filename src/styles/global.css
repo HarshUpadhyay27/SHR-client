@@ -44,3 +44,9 @@ body {
 
   /*-----------------PROFILE--------------------*/
   @import url('./profile.css');
+
+  /*-----------------HOME--------------------*/
+  @import url('./home.css');
+
+  /*-----------------STATUS_MODAL--------------------*/
+  @import url('./status_modal.css');
