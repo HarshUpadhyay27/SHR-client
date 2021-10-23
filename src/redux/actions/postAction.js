@@ -1,9 +1,11 @@
 import { GLOBALTYPES } from "./globalType";
 import { imageUpload } from "../../utils/imageUpload";
-import { postDataApi } from "../../utils/fetchData";
+import { getDataApi, postDataApi } from "../../utils/fetchData";
 
 export const POST_TYPE = {
   CREATE_POST: "CREATE_POST",
+  LOADING_POST: "LOADING_POST",
+  GET_POSTS: "GET_POSTS"
 };
 
 export const createPost =
@@ -39,3 +41,27 @@ export const createPost =
       });
     }
   };
+
+export const getPosts = (token)=> async (dispatch)=>{
+  try {
+    dispatch({
+      type: POST_TYPE.LOADING_POST,
+      payload: true,
+    });
+    const res = await getDataApi('posts', token)
+    console.log(res)
+    dispatch({
+      type: POST_TYPE.GET_POSTS,
+      payload: res.data
+    })
+    dispatch({
+      type: POST_TYPE.LOADING_POST,
+      payload: false,
+    });
+  } catch (error) {
+    dispatch({
+      type: GLOBALTYPES.ALERT,
+      payload: { error: error.response.data.msg },
+    });
+  }
+} 

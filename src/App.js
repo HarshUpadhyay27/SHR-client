@@ -10,6 +10,7 @@ import { refreshToken } from "./redux/actions/authAction";
 import Alert from "./components/alert/Alert";
 import Header from "./components/header/Header";
 import StatusModal from "./components/StatusModal";
+import { getPosts } from "./redux/actions/postAction";
 
 const App = () => {
   const { auth, status } = useSelector((state) => state);
@@ -18,6 +19,10 @@ const App = () => {
   useEffect(() => {
     dispatch(refreshToken());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (auth.token) dispatch(getPosts(auth.token));
+  }, [dispatch, auth.token]);
 
   return (
     <Router>
