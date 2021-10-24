@@ -5,6 +5,7 @@
     box-shadow: 0 0 5px #ddd;
     padding: 20px;
     border-radius: 5px;
+    box-sizing: border-box;
 }
 .status .statusBtn{
     background-color: #f1f1f1;
@@ -12,7 +13,7 @@
     outline: none;
     border-radius: 30px;
     color: #555;
-    padding: 0 10px;
+    padding: 0 5px;
     text-align: left;
     margin: 0 5px;
 }
@@ -44,4 +45,27 @@
     display: flex;
     margin: 5px 0;
     align-items: center;
+}
+
+/*---------------Posts card body-----------------*/
+.card_body-content{
+    padding: 0 25px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+.posts .card_body-content .readMore{
+    color: crimson;
+    cursor: pointer;
+}
+
+/*---------------Posts card footer-----------------*/
+.posts .card_icon_menu{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 15px;
+    cursor: pointer;
+}
+.posts .card_icon_menu i{
+    font-size: 28px;
+    margin: 10px;
 }
