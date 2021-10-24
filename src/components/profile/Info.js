@@ -7,6 +7,7 @@ import EditProfile from "./EditProfile";
 import FollowBtn from "../FollowBtn";
 import Followers from "./Followers";
 import Following from "./Following";
+import { GLOBALTYPES } from "../../redux/actions/globalType";
 
 const Info = () => {
   const { id } = useParams();
@@ -16,8 +17,8 @@ const Info = () => {
   const [userData, setUserData] = useState([]);
   const [onEdit, setOnEdit] = useState(false);
 
-  const [showFollowers, setShowFollowers] = useState(false)
-  const [showFollowing, setShowFollowing] = useState(false)
+  const [showFollowers, setShowFollowers] = useState(false);
+  const [showFollowing, setShowFollowing] = useState(false);
 
   useEffect(() => {
     if (id === auth.user._id) {
@@ -28,6 +29,14 @@ const Info = () => {
       setUserData(newData);
     }
   }, [id, auth, profile.users, dispatch]);
+
+  useEffect(() => {
+    if (showFollowers || showFollowing || onEdit) {
+      dispatch({ type: GLOBALTYPES.MODAL, payload: true });
+    } else {
+      dispatch({ type: GLOBALTYPES.MODAL, payload: true });
+    }
+  }, [showFollowing, showFollowers, onEdit, dispatch]);
 
   return (
     <div className="info">
@@ -49,10 +58,16 @@ const Info = () => {
               )}
             </div>
             <div className="follow_btn">
-              <span style={{ marginRight: "3rem" }} onClick={()=>setShowFollowers(true)} >
+              <span
+                style={{ marginRight: "3rem" }}
+                onClick={() => setShowFollowers(true)}
+              >
                 {user.followers.length} Followers
               </span>
-              <span style={{ marginLeft: "3rem" }} onClick={()=>setShowFollowing(true)} >
+              <span
+                style={{ marginLeft: "3rem" }}
+                onClick={() => setShowFollowing(true)}
+              >
                 {user.following.length} Following
               </span>
             </div>
@@ -67,8 +82,18 @@ const Info = () => {
             <p>{user.story}</p>
           </div>
           {onEdit && <EditProfile setOnEdit={setOnEdit} />}
-          {showFollowers && <Followers users={user.followers} setShowFollowers={setShowFollowers} />}
-          {showFollowing && <Following users={user.following} setShowFollowing={setShowFollowing} /> }
+          {showFollowers && (
+            <Followers
+              users={user.followers}
+              setShowFollowers={setShowFollowers}
+            />
+          )}
+          {showFollowing && (
+            <Following
+              users={user.following}
+              setShowFollowing={setShowFollowing}
+            />
+          )}
         </div>
       ))}
     </div>

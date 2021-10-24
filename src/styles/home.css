@@ -5,7 +5,7 @@
     box-shadow: 0 0 5px #ddd;
     padding: 20px;
     border-radius: 5px;
-    box-sizing: border-box;
+    border: 1px solid #ddd;
 }
 .status .statusBtn{
     background-color: #f1f1f1;

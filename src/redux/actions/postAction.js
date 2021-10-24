@@ -6,7 +6,7 @@ export const POST_TYPE = {
   CREATE_POST: "CREATE_POST",
   LOADING_POST: "LOADING_POST",
   GET_POSTS: "GET_POSTS",
-  UPDATE_POST: "UPDATE_POST"
+  UPDATE_POST: "UPDATE_POST",
 };
 
 export const createPost =
@@ -98,6 +98,35 @@ export const updatePost =
         type: GLOBALTYPES.ALERT,
         payload: { success: res.data.msg },
       });
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
+  };
+
+export const likePost =
+  ({ post, auth }) =>
+  async (dispatch) => {
+    const newPost = { ...post, likes: [...post.likes, auth.user] };
+    dispatch({ type: POST_TYPE.UPDATE_POST, payload: newPost });
+    try {
+      await patchDataApi(`post/${post._id}/like`, null, auth.token)
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
+  };
+export const unlikePost =
+  ({ post, auth }) =>
+  async (dispatch) => {
+    const newPost = { ...post, likes: post.likes.filter(like=>like._id !== auth.user._id) };
+    dispatch({ type: POST_TYPE.UPDATE_POST, payload: newPost });
+    try {
+      await patchDataApi(`post/${post._id}/unlike`, null, auth.token)
     } catch (error) {
       dispatch({
         type: GLOBALTYPES.ALERT,

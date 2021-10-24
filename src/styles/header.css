@@ -6,6 +6,7 @@
   left: 0;
   z-index: 2;
   box-shadow: 0 0 10px #ddd;
+  border: 1px solid #ddd;
 }
 .header .navbar {
   width: 100%;

@@ -52,3 +52,9 @@ body {
 
   /*-----------------STATUS_MODAL--------------------*/
   @import url('./status_modal.css');
+
+  .mode{
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+  }
