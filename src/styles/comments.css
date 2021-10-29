@@ -1,0 +1,17 @@
+.comment_input{
+    display: flex;
+}
+.comment_input input{
+    background-color: #f7f7f7;
+    border: none;
+    outline: none;
+    flex: 1;
+    overflow: auto;
+}
+.comment_input .postBtn{
+    border: none;
+    outline: none;
+    background-color: #f7f7f7;
+    color: blue;
+    font-weight: 600;
+}

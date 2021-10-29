@@ -28,7 +28,7 @@ export const createPost =
 
       dispatch({
         type: POST_TYPE.CREATE_POST,
-        payload: res.data.newPost,
+        payload: {...res.data.newPost, user: auth.user},
       });
 
       dispatch({

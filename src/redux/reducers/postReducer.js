@@ -13,7 +13,7 @@ const postReducer = (state = initialState, action) => {
     case POST_TYPE.CREATE_POST:
       return {
         ...state,
-        posts: [...state.posts, action.payload],
+        posts: [action.payload, ...state.posts],
       };
     case POST_TYPE.LOADING_POST:
       return {
