@@ -4,8 +4,9 @@ import CommentDisplay from "./comments/CommentDisplay";
 const Comments = ({ post }) => {
   const [comments, setComments] = useState([]);
   const [showComments, setShowComments] = useState([]);
-
   const [next, setNext] = useState(2);
+
+  const [replyComments, setReplyComments] = useState([]);
 
   useEffect(() => {
     const newCm = post.comments.filter((cm) => !cm.reply);
@@ -13,10 +14,20 @@ const Comments = ({ post }) => {
     setShowComments(newCm.slice(newCm.length - next));
   }, [post.comments, next]);
 
+  useEffect(() => {
+    const newRep = post.comments.filter((cm) => cm.reply);
+    setReplyComments(newRep);
+  }, [post.comments]);
+
   return (
-    <div>
-      {showComments.map((comment) => (
-        <CommentDisplay key={comment._id} comment={comment} post={post} />
+    <div className="comments">
+      {showComments.map((comment, index) => (
+        <CommentDisplay
+          key={index}
+          comment={comment}
+          post={post}
+          replyCm={replyComments.filter((item) => item.reply === comment._id)}
+        />
       ))}
       {comments.length - next > 0 ? (
         <div
