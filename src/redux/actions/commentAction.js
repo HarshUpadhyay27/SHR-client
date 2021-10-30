@@ -11,10 +11,13 @@ export const createComment = (post, newComment, auth) => async (dispatch) => {
   });
 
   try {
-    const data = { ...newPost, postId: post._id };
+    const data = { ...newComment, postId: post._id };
+    console.log(data);
     const res = await postDataApi("comment", data, auth.token);
 
-    console.log(res);
+    const newData = { ...res.data.newComment, user: auth.user };
+    const newPost = { ...post, comments: [...post.comments, newData] };
+    dispatch({ type: POST_TYPE.UPDATE_POST, payload: newPost });
   } catch (err) {
     dispatch({
       type: GLOBALTYPES.ALERT,
