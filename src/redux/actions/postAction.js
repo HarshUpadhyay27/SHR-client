@@ -7,6 +7,7 @@ export const POST_TYPE = {
   LOADING_POST: "LOADING_POST",
   GET_POSTS: "GET_POSTS",
   UPDATE_POST: "UPDATE_POST",
+  GET_POST: "GET_POST",
 };
 
 export const createPost =
@@ -28,7 +29,7 @@ export const createPost =
 
       dispatch({
         type: POST_TYPE.CREATE_POST,
-        payload: {...res.data.newPost, user: auth.user},
+        payload: { ...res.data.newPost, user: auth.user },
       });
 
       dispatch({
@@ -112,7 +113,7 @@ export const likePost =
     const newPost = { ...post, likes: [...post.likes, auth.user] };
     dispatch({ type: POST_TYPE.UPDATE_POST, payload: newPost });
     try {
-      await patchDataApi(`post/${post._id}/like`, null, auth.token)
+      await patchDataApi(`post/${post._id}/like`, null, auth.token);
     } catch (error) {
       dispatch({
         type: GLOBALTYPES.ALERT,
@@ -123,14 +124,36 @@ export const likePost =
 export const unlikePost =
   ({ post, auth }) =>
   async (dispatch) => {
-    const newPost = { ...post, likes: post.likes.filter(like=>like._id !== auth.user._id) };
+    const newPost = {
+      ...post,
+      likes: post.likes.filter((like) => like._id !== auth.user._id),
+    };
     dispatch({ type: POST_TYPE.UPDATE_POST, payload: newPost });
     try {
-      await patchDataApi(`post/${post._id}/unlike`, null, auth.token)
+      await patchDataApi(`post/${post._id}/unlike`, null, auth.token);
     } catch (error) {
       dispatch({
         type: GLOBALTYPES.ALERT,
         payload: { error: error.response.data.msg },
       });
+    }
+  };
+
+export const getPost =
+  ({ detailPost, id, auth }) =>
+  async (dispatch) => {
+    if (detailPost.every((post) => post._id !== id)) {
+      try {
+        const res = await getDataApi(`post/${id}`, auth.token)
+        dispatch({
+          type: POST_TYPE.GET_POST,
+          payload: res.data.post
+        })
+      } catch (error) {
+        dispatch({
+          type: GLOBALTYPES.ALERT,
+          payload: { error: error.response.data.msg },
+        });
+      }
     }
   };
