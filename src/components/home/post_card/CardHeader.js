@@ -1,17 +1,31 @@
 import React from "react";
 import Avatar from "../../Avatar";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import { GLOBALTYPES } from "../../../redux/actions/globalType";
+import { deletePost } from "../../../redux/actions/postAction";
+import { BASE_URL } from "../../../utils/config";
 
 const CardHeader = ({ post }) => {
   const { auth } = useSelector((state) => state);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const history = useHistory();
 
-  const handleEditPost = ()=>{
-    dispatch({type:GLOBALTYPES.STATUS, payload: {...post, onEdit: true}})
-  }
+  const handleEditPost = () => {
+    dispatch({ type: GLOBALTYPES.STATUS, payload: { ...post, onEdit: true } });
+  };
+
+  const handleDeletePost = () => {
+    if (window.confirm("Are you sure want to delete this post?")) {
+      dispatch(deletePost({ post, auth }));
+      return history.push("/");
+    }
+  };
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(`${BASE_URL}/post/${post._id}`);
+  };
 
   return (
     <div className="card_header">
@@ -19,7 +33,7 @@ const CardHeader = ({ post }) => {
         <Avatar src={post.user.avatar} size="big-avatar" />
         <div className="card_name">
           <h6 className="m-0">
-            <Link to={`/profile/${post.user._id}`} className="text-dark" >
+            <Link to={`/profile/${post.user._id}`} className="text-dark">
               {post.user.username}
             </Link>
           </h6>
@@ -29,25 +43,32 @@ const CardHeader = ({ post }) => {
         </div>
       </div>
       <div className="nav-item dropdown">
-        <span className="material-icons" id="moreLink" data-bs-toggle="dropdown">
+        <span
+          className="material-icons"
+          id="moreLink"
+          data-bs-toggle="dropdown"
+        >
           more_horiz
         </span>
 
         <div className="dropdown-menu">
-          {
-                  auth.user._id === post.user._id &&
-                  <>
-                  <div className="dropdown-item" onClick={()=>handleEditPost(post)} >
-                      <span className="material-icons" >create</span>Edit Post
-                  </div>
-                  <div className="dropdown-item" >
-                      <span className="material-icons" >delete_outline</span>Delete Post
-                  </div>
-                  </>
-              }
-              <div className="dropdown-item" >
-                      <span className="material-icons" >content_copy</span>Copy Link
-                  </div>
+          {auth.user._id === post.user._id && (
+            <>
+              <div
+                className="dropdown-item"
+                onClick={() => handleEditPost(post)}
+              >
+                <span className="material-icons">create</span>Edit Post
+              </div>
+              <div className="dropdown-item" onClick={handleDeletePost}>
+                <span className="material-icons">delete_outline</span>Delete
+                Post
+              </div>
+            </>
+          )}
+          <div className="dropdown-item" onClick={handleCopyLink}>
+            <span className="material-icons">content_copy</span>Copy Link
+          </div>
         </div>
       </div>
     </div>

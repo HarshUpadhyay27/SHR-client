@@ -1,4 +1,4 @@
-import { EditData } from "../actions/globalType";
+import { DeleteData, EditData } from "../actions/globalType";
 import { POST_TYPE } from "../actions/postAction";
 
 const initialState = {
@@ -25,12 +25,17 @@ const postReducer = (state = initialState, action) => {
         ...state,
         posts: action.payload.posts,
         result: action.payload.result,
-        page: action.payload.page
+        page: action.payload.page,
       };
     case POST_TYPE.UPDATE_POST:
       return {
         ...state,
         posts: EditData(state.posts, action.payload._id, action.payload),
+      };
+    case POST_TYPE.DELETE_POST:
+      return {
+        ...state,
+        posts: DeleteData(state.posts, action.payload._id),
       };
     default:
       return state;
