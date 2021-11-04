@@ -53,7 +53,7 @@ export const getPosts = (token) => async (dispatch) => {
     const res = await getDataApi("posts", token);
     dispatch({
       type: POST_TYPE.GET_POSTS,
-      payload: res.data,
+      payload: {...res.data, page: 2},
     });
     dispatch({
       type: POST_TYPE.LOADING_POST,

@@ -2,13 +2,12 @@
     position: fixed;
     top: 0;
     left: 0;
-    background-color: #0008;
-    z-index: 4;
     width: 100%;
-    height: 100vh;
+    height: 100%;
+    background-color: #0008;
+    z-index: 9;
     overflow: auto;
-    box-sizing: border-box;
-    overflow-y: hidden;
+    padding: 0 1rem;
 }
 .status_modal form{
     max-width: 450px;

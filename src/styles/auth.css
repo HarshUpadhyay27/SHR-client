@@ -2,7 +2,9 @@
     width: 100%;
     min-height: 100vh;
     background-color: #fdfdfd;
-    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .auth-page form{
     background-color: #fff;
