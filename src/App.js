@@ -36,7 +36,7 @@ const App = () => {
           {status && <StatusModal />}
           <Route exact path="/" component={auth.token ? Home : Login} />
           <Route exact path="/register" component={Register} />
-          <div style={{marginBottom: '60px'}} >
+          <div className="wrap_page" >
           <PrivateRoute exact path="/:page" component={PageRender} />
           <PrivateRoute exact path="/:page/:id" component={PageRender} />
           </div>
