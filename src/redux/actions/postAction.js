@@ -114,10 +114,12 @@ export const updatePost =
   };
 
 export const likePost =
-  ({ post, auth }) =>
+  ({ post, auth, socket }) =>
   async (dispatch) => {
     const newPost = { ...post, likes: [...post.likes, auth.user] };
     dispatch({ type: POST_TYPE.UPDATE_POST, payload: newPost });
+    socket.emit("likePost", newPost);
+
     try {
       await patchDataApi(`post/${post._id}/like`, null, auth.token);
     } catch (error) {
@@ -128,13 +130,15 @@ export const likePost =
     }
   };
 export const unlikePost =
-  ({ post, auth }) =>
+  ({ post, auth, socket }) =>
   async (dispatch) => {
     const newPost = {
       ...post,
       likes: post.likes.filter((like) => like._id !== auth.user._id),
     };
     dispatch({ type: POST_TYPE.UPDATE_POST, payload: newPost });
+    socket.emit("unLikePost", newPost);
+
     try {
       await patchDataApi(`post/${post._id}/unlike`, null, auth.token);
     } catch (error) {
@@ -213,16 +217,3 @@ export const unSavePost =
       });
     }
   };
-
-// export const getSavePost =
-//   ({ post, auth }) =>
-//   async (dispatch) => {
-//     try {
-      
-//     } catch (error) {
-//       dispatch({
-//         type: GLOBALTYPES.ALERT,
-//         payload: { error: error.response.data.msg },
-//       });
-//     }
-//   };

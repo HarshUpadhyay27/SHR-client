@@ -7,7 +7,7 @@ import { DeleteData, EditData, GLOBALTYPES } from "./globalType";
 import { POST_TYPE } from "./postAction";
 
 export const createComment =
-  ({ post, newComment, auth }) =>
+  ({ post, newComment, auth, socket }) =>
   async (dispatch) => {
     const newPost = {
       ...post,
@@ -27,6 +27,9 @@ export const createComment =
       const newData = { ...res.data.newComment, user: auth.user };
       const newPost = { ...post, comments: [...post.comments, newData] };
       dispatch({ type: POST_TYPE.UPDATE_POST, payload: newPost });
+
+      // socket
+      socket.emit("createComment", newPost);
     } catch (err) {
       dispatch({
         type: GLOBALTYPES.ALERT,
@@ -104,7 +107,7 @@ export const unLikeComment =
   };
 
 export const deleteComment =
-  ({ post, auth, comment }) =>
+  ({ post, auth, comment, socket }) =>
   async (dispatch) => {
     const deleteArr = [
       ...post.comments.filter((cm) => cm.reply === comment._id),
@@ -119,6 +122,7 @@ export const deleteComment =
     };
 
     dispatch({ type: POST_TYPE.UPDATE_POST, payload: newPost });
+    socket.emit("deleteComment", newPost);
 
     try {
       deleteArr.forEach((item) =>
