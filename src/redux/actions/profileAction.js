@@ -181,7 +181,7 @@ export const unfollow =
 
     try {
       const res = await patchDataApi(
-        `user/${user._id}/unfollow`,
+        `user/${user._id}/unfollow`, 
         null,
         auth.token
       );

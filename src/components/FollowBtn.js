@@ -9,11 +9,11 @@ const FollowBtn = ({ user }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if(auth.user.following.find(item=>item._id===user._id)){
-      setFollowed(true)
+    if (auth.user.following.find((item) => item._id === user._id)) {
+      setFollowed(true);
     }
-    return ()=>setFollowed(false)
-  }, [auth.user.following, user._id])
+    return () => setFollowed(false);
+  }, [auth.user.following, user._id]);
 
   const handleFollow = () => {
     setFollowed(true);
