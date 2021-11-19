@@ -12,10 +12,11 @@ import Header from "./components/header/Header";
 import StatusModal from "./components/StatusModal";
 import { getPosts } from "./redux/actions/postAction";
 import { getSuggestions } from "./redux/actions/suggestionAction";
-import SocketClient from './SocketClient'
+import SocketClient from "./SocketClient";
 
 import io from "socket.io-client";
 import { GLOBALTYPES } from "./redux/actions/globalType";
+import { getNotifies } from "./redux/actions/notifyAction";
 
 const App = () => {
   const { auth, status, modal } = useSelector((state) => state);
@@ -32,6 +33,7 @@ const App = () => {
     if (auth.token) {
       dispatch(getPosts(auth.token));
       dispatch(getSuggestions(auth.token));
+      dispatch(getNotifies(auth.token));
     }
   }, [dispatch, auth.token]);
 
@@ -43,7 +45,7 @@ const App = () => {
         <div className="main">
           {auth.token && <Header />}
           {status && <StatusModal />}
-          {auth.token && <SocketClient /> }
+          {auth.token && <SocketClient />}
           <Route exact path="/" component={auth.token ? Home : Login} />
           <Route exact path="/register" component={Register} />
           <div className="wrap_page">
