@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Avatar from "./Avatar";
 import moment from "moment";
+import NoNotice from "../images/notice.png";
 
 const NotifyModal = () => {
   const { auth, notify } = useSelector((state) => state);
@@ -25,7 +26,9 @@ const NotifyModal = () => {
         )}
       </div>
       <hr />
-      {/* {notify.data.length === 0 && } */}
+      {notify.data.length === 0 && (
+        <img src={NoNotice} alt="NoNotice" className="w-100" />
+      )}
       <div style={{ maxHeight: "calc(100vh - 300px)", overflow: "auto" }}>
         {notify.data.map((msg, index) => (
           <div key={index} className="px-2 mb-3">
