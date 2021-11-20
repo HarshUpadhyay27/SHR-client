@@ -1,10 +1,18 @@
 import { GLOBALTYPES } from "./globalType";
-import { deleteDataApi, getDataApi, postDataApi } from "../../utils/fetchData";
+import {
+  deleteDataApi,
+  getDataApi,
+  patchDataApi,
+  postDataApi,
+} from "../../utils/fetchData";
 
 export const NOTIFY_TYPES = {
   GET_NOTIFIES: "GET_NOTIFIES",
   CREATE_NOTIFY: "CREATE_NOTIFY",
   REMOVE_NOTIFY: "REMOVE_NOTIFY",
+  UPADTE_NOTIFY: "UPDATE_NOTIFY",
+  UPDATE_SOUND: "UPDATE_SOUND",
+  DELETE_ALL_NOTIFIES: "DELETE_ALL_NOTIFIES",
 };
 
 export const createNotify =
@@ -34,7 +42,7 @@ export const removeNotify =
       await deleteDataApi(`notify/${msg.id}?url=${msg.url}`, auth.token);
       socket.emit("removeNotify", msg);
     } catch (error) {
-      dispatch({ 
+      dispatch({
         type: GLOBALTYPES.ALERT,
         payload: { error: error.response.data.msg },
       });
@@ -44,8 +52,36 @@ export const removeNotify =
 export const getNotifies = (token) => async (dispatch) => {
   try {
     const res = await getDataApi("notifies", token);
-    console.log(res);
     dispatch({ type: NOTIFY_TYPES.GET_NOTIFIES, payload: res.data.notifies });
+  } catch (error) {
+    dispatch({
+      type: GLOBALTYPES.ALERT,
+      payload: { error: error.response.data.msg },
+    });
+  }
+};
+
+export const isReadNotify =
+  ({ msg, auth }) =>
+  async (dispatch) => {
+    dispatch({
+      type: NOTIFY_TYPES.UPADTE_NOTIFY,
+      payload: { ...msg, isRead: true },
+    });
+    try {
+      await patchDataApi(`/isReadNotify/${msg._id}`, null, auth.token);
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error.response.data.msg },
+      });
+    }
+  };
+
+export const deleteAllNotifies = (token) => async (dispatch) => {
+  dispatch({ type: NOTIFY_TYPES.DELETE_ALL_NOTIFIES, payload: [] });
+  try {
+    await deleteDataApi("deleteAllNotify", token);
   } catch (error) {
     dispatch({
       type: GLOBALTYPES.ALERT,
