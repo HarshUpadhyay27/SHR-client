@@ -14,7 +14,7 @@ import {
 import InputComment from "../InputComment";
 
 const CommentCard = ({ children, comment, post, commentId }) => {
-  const { auth } = useSelector((state) => state);
+  const { auth, theme } = useSelector((state) => state);
   const dispatch = useDispatch();
 
   const [content, setContent] = useState("");
@@ -28,8 +28,8 @@ const CommentCard = ({ children, comment, post, commentId }) => {
 
   useEffect(() => {
     setContent(comment.content);
-    setIsLike(false)
-    setOnReply(false)
+    setIsLike(false);
+    setOnReply(false);
     if (comment.likes.find((like) => like._id === auth.user._id)) {
       setIsLike(true);
     }
@@ -79,7 +79,13 @@ const CommentCard = ({ children, comment, post, commentId }) => {
         <h6 className="mx-1">{comment.user.username}</h6>
       </Link>
       <div className="comment_content">
-        <div className="flex-fill">
+        <div
+          className="flex-fill"
+          style={{
+            filter: theme ? "invert(1)" : "invert(0)",
+            color: theme ? "white" : "#111",
+          }}
+        >
           {onEdit ? (
             <textarea
               rows="5"
