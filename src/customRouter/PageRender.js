@@ -20,12 +20,12 @@ const PageRender = () => {
 
   let pageName = "";
 
-  if(auth.token){
-      if (id) {
-        pageName = `${page}/[id]`;
-      } else {
-        pageName = `${page}`;
-      }
+  if (auth.token) {
+    if (id) {
+      pageName = `${page}/[id]`;
+    } else {
+      pageName = `${page}`;
+    }
   }
 
   return generatePage(pageName);

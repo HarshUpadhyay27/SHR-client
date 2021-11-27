@@ -84,7 +84,7 @@ const SocketClient = () => {
         msg.user.username + " " + msg.text,
         msg.user.avatar,
         msg.url,
-        "SOCIAL-APP"
+        "V-NETWORK"
       );
     });
     return () => socket.off("createNotifyToClient");

@@ -10,7 +10,7 @@ const UserCard = ({children, user, border, handleClose, setShowFollowers, setSho
   };
 
   return (
-    <div className={`p-2 ${border} align-items-center d-flex justify-content-between`}>
+    <div className={`p-2 ${border} align-items-center d-flex justify-content-between w-100`}>
       <div>
         <Link
           to={`/profile/${user._id}`}
