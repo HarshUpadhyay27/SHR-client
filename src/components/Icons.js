@@ -11,9 +11,9 @@ const Icons = ({setContent, content, theme}) => {
         <div className="nav-item dropdown" 
         style={{ opacity: 1, filter: theme ? 'invert(1)' : 'invert(0)' }}>
             
-            <span className="nav-link position-relative px-1" id="navbarDropdown" 
+            <span className="nav-link position-relative px-0" id="navbarDropdown" 
             role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span style={{opacity: 0.4}}>😄</span>
+                <span style={{opacity: 0.7}}>😄</span>
             </span>
 
             <div className="dropdown-menu" aria-labelledby="navbarDropdown">

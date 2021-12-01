@@ -1,5 +1,6 @@
 export const MESS_TYPES = {
   ADD_USER: "ADD_USER",
+  ADD_MESSAGE: "ADD_MESSAGE",
 };
 
 export const addUser =
@@ -11,4 +12,11 @@ export const addUser =
         payload: user,
       });
     }
+  };
+
+export const addMessage =
+  ({ msg, auth, socket }) =>
+  async (dispatch) => {
+    console.log({ msg });
+    dispatch({ type: MESS_TYPES.ADD_MESSAGE, payload: msg });
   };

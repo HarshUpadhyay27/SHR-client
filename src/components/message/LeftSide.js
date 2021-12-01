@@ -45,6 +45,8 @@ const LeftSide = () => {
     return "";
   };
 
+  console.log(message.users)
+
   return (
     <>
       <form className="message-header" onSubmit={handleSearch}>
@@ -79,7 +81,7 @@ const LeftSide = () => {
                 className={`message_user ${isActive(user)}`}
                 onClick={() => handleAddUser(user)}
               >
-                <UserCard user={user}>
+                <UserCard user={user} msg={true} >
                   <i className="fas fa-circle" />
                 </UserCard>
               </div>
