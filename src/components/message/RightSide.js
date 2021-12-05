@@ -7,7 +7,7 @@ import { imageUpload } from "../../utils/imageUpload";
 import Icons from "../Icons";
 import UserCard from "../UserCard";
 import MsgDisplay from "./MsgDisplay";
-import { addMessage } from "../../redux/actions/messageAction";
+import { addMessage, getMessage } from "../../redux/actions/messageAction";
 import LoadIcon from "../../images/loading.gif";
 
 const RightSide = () => {
@@ -74,6 +74,15 @@ const RightSide = () => {
     setLoadMedia(false);
     dispatch(addMessage({ msg, auth, socket }));
   };
+
+  useEffect(() => {
+    if (id) {
+      const getMessageData = async () => {
+        await dispatch(getMessage({ auth, id }));
+      };
+      getMessageData();
+    }
+  }, [auth, id, dispatch]);
 
   return (
     <>

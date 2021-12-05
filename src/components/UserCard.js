@@ -35,7 +35,7 @@ const UserCard = ({
             <span className="d-block">{user.username}</span>
 
             <small style={{ opacity: "0.7" }}>
-              {user.title || user.media ? (
+              {msg ? (
                 <>
                   <div
                     style={{
