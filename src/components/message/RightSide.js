@@ -22,7 +22,7 @@ const RightSide = () => {
   const [user, setUser] = useState([]);
   const [text, setText] = useState("");
   const [media, setMedia] = useState([]);
-  const [loadMedia, setLoadMedia] = useState(0);
+  const [loadMedia, setLoadMedia] = useState(false);
 
   const refDisplay = useRef();
   const pageEnd = useRef();
