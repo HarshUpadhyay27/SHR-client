@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router";
+import { useParams, useHistory } from "react-router";
 import { GLOBALTYPES } from "../../redux/actions/globalType";
 import { imageShow, videoShow } from "../../utils/mediaShow";
 import { imageUpload } from "../../utils/imageUpload";
@@ -9,6 +9,7 @@ import UserCard from "../UserCard";
 import MsgDisplay from "./MsgDisplay";
 import {
   addMessage,
+  deleteConversation,
   getMessage,
   loadMoreMessage,
 } from "../../redux/actions/messageAction";
@@ -31,6 +32,8 @@ const RightSide = () => {
   const [result, setResult] = useState(9);
   const [page, setPage] = useState(0);
   const [isLoadMore, setIsLoadMore] = useState(false);
+
+  const history = useHistory()
 
   useEffect(() => {
     const newData = message.data.find((item) => item._id === id);
@@ -146,17 +149,26 @@ const RightSide = () => {
     if (isLoadMore > 1) {
       if (result >= page * 9) {
         dispatch(loadMoreMessage({ auth, id, page: page + 1 }));
-        setIsLoadMore(1)
+        setIsLoadMore(1);
       }
     }
   }, [auth, id, page, dispatch, isLoadMore]);
+
+  const handleDeleteConversation = () => {
+    dispatch(deleteConversation({auth, id}))
+    return history.push("/message")
+  };
 
   return (
     <>
       <div className="message-header">
         {user.length !== 0 && (
           <UserCard user={user}>
-            <i className="fas fa-trash text-danger" />
+            <i
+              className="fas fa-trash text-danger"
+              style={{ cursor: "pointer" }}
+              onClick={handleDeleteConversation}
+            />
           </UserCard>
         )}
       </div>
@@ -177,7 +189,12 @@ const RightSide = () => {
               )}
               {msg.sender === auth.user._id && (
                 <div className="chat_row you_message">
-                  <MsgDisplay user={auth.user} msg={msg} theme={theme} data={data} />
+                  <MsgDisplay
+                    user={auth.user}
+                    msg={msg}
+                    theme={theme}
+                    data={data}
+                  />
                 </div>
               )}
             </div>

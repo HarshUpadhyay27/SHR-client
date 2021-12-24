@@ -1,7 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GLOBALTYPES } from "../../redux/actions/globalType";
-import { addUser, getConversations } from "../../redux/actions/messageAction";
+import {
+  MESS_TYPES,
+  getConversations,
+} from "../../redux/actions/messageAction";
 import { getDataApi } from "../../utils/fetchData";
 import UserCard from "../UserCard";
 import { useHistory, useParams } from "react-router-dom";
@@ -15,8 +18,8 @@ const LeftSide = () => {
   const history = useHistory();
   const { id } = useParams();
 
-  const pageEnd = useRef()
-  const [page, setPage] = useState(0)
+  const pageEnd = useRef();
+  const [page, setPage] = useState(0);
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -39,7 +42,10 @@ const LeftSide = () => {
   const handleAddUser = (user) => {
     setSearch("");
     setSearchUsers([]);
-    dispatch(addUser({ user, message }));
+    dispatch({
+      type: MESS_TYPES.ADD_USER,
+      payload: { ...user, text: "", media: [] },
+    });
     return history.push(`/message/${user._id}`);
   };
 
@@ -50,29 +56,29 @@ const LeftSide = () => {
 
   useEffect(() => {
     if (message.firstLoad) return;
-    dispatch(getConversations({auth}));
+    dispatch(getConversations({ auth }));
   }, [dispatch, auth, message.firstLoad]);
 
-    // Load More
-    useEffect(() => {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          if (entries[0].isIntersecting) {
-            setPage((p) => p + 1);
-          }
-        },
-        {
-          threshold: 0.1,
+  // Load More
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setPage((p) => p + 1);
         }
-      );
-      observer.observe(pageEnd.current);
-    }, [setPage]);
-
-    useEffect(() => {
-      if (message.resultUsers >= (page - 1) * 9 && page > 1) {
-        dispatch(getConversations({ auth, page }));
+      },
+      {
+        threshold: 0.1,
       }
-    }, [message.resultUsers, auth, page, dispatch]);
+    );
+    observer.observe(pageEnd.current);
+  }, [setPage]);
+
+  useEffect(() => {
+    if (message.resultUsers >= (page - 1) * 9 && page > 1) {
+      dispatch(getConversations({ auth, page }));
+    }
+  }, [message.resultUsers, auth, page, dispatch]);
 
   return (
     <>
@@ -115,7 +121,9 @@ const LeftSide = () => {
             ))}
           </>
         )}
-        <button ref={pageEnd} style={{opacity: 0}} >Load more</button>
+        <button ref={pageEnd} style={{ opacity: 0 }}>
+          Load more
+        </button>
       </div>
     </>
   );

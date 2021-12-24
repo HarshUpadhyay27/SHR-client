@@ -7,25 +7,32 @@ export const MESS_TYPES = {
   GET_CONVERSATIONS: "GET_CONVERSATIONS",
   GET_MESSAGES: "GET_MESSAGES",
   UPDATE_MESSAGES: "UPDATE_MESSAGES",
-  DELETE_MESSAGES: "DELETE_MESSAGES"
+  DELETE_MESSAGES: "DELETE_MESSAGES",
+  DELETE_CONVERSATIONS: "DELETE_CONVERSATIONS",
 };
 
-export const addUser =
-  ({ user, message }) =>
-  async (dispatch) => {
-    if (message.users.every((item) => item._id !== user._id)) {
-      dispatch({
-        type: MESS_TYPES.ADD_USER,
-        payload: { ...user, text: "", media: [] },
-      });
-    }
-  };
+// export const addUser =
+//   ({ user, message }) =>
+//   async (dispatch) => {
+//     if (message.users.every((item) => item._id !== user._id)) {
+//       dispatch({
+//         type: MESS_TYPES.ADD_USER,
+//         payload: { ...user, text: "", media: [] },
+//       });
+//     }
+//   };
 
 export const addMessage =
   ({ msg, auth, socket }) =>
   async (dispatch) => {
     dispatch({ type: MESS_TYPES.ADD_MESSAGE, payload: msg });
-    socket.emit("addMessage", msg);
+
+    const { _id, avatar, fullname, username } = auth.user;
+    socket.emit("addMessage", {
+      ...msg,
+      user: { _id, avatar, fullname, username },
+    });
+    
     try {
       await postDataApi("message", msg, auth.token);
     } catch (error) {
@@ -75,9 +82,10 @@ export const getMessage =
       );
       const newData = { ...res.data, messages: res.data.messages.reverse() };
 
-      console.log(newData);
-
-      dispatch({ type: MESS_TYPES.GET_MESSAGES, payload: {...newData, _id: id, page} });
+      dispatch({
+        type: MESS_TYPES.GET_MESSAGES,
+        payload: { ...newData, _id: id, page },
+      });
     } catch (error) {
       dispatch({
         type: GLOBALTYPES.ALERT,
@@ -96,7 +104,10 @@ export const loadMoreMessage =
       );
       const newData = { ...res.data, messages: res.data.messages.reverse() };
 
-      dispatch({ type: MESS_TYPES.UPDATE_MESSAGES, payload: {...newData, _id: id, page} });
+      dispatch({
+        type: MESS_TYPES.UPDATE_MESSAGES,
+        payload: { ...newData, _id: id, page },
+      });
     } catch (error) {
       dispatch({
         type: GLOBALTYPES.ALERT,
@@ -105,15 +116,34 @@ export const loadMoreMessage =
     }
   };
 
-  export const deleteMessages = ({msg, data, auth})=> async (dispatch)=>{
-    const newData = DeleteData(data, msg._id)
-    dispatch({type: MESS_TYPES.DELETE_MESSAGES, payload: {newData, _id: msg.recipient}})
+export const deleteMessages =
+  ({ msg, data, auth }) =>
+  async (dispatch) => {
+    const newData = DeleteData(data, msg._id);
+    dispatch({
+      type: MESS_TYPES.DELETE_MESSAGES,
+      payload: { newData, _id: msg.recipient },
+    });
     try {
-      await deleteDataApi(`/message/${msg._id}`, auth.token)
+      await deleteDataApi(`/message/${msg._id}`, auth.token);
     } catch (error) {
       dispatch({
         type: GLOBALTYPES.ALERT,
         payload: error.response.data.msg,
       });
     }
-  }
+  };
+
+export const deleteConversation =
+  ({ auth, id }) =>
+  async (dispatch) => {
+    dispatch({ type: MESS_TYPES.DELETE_CONVERSATIONS, payload: id });
+    try {
+      await deleteDataApi(`conversation/${id}`, auth.token);
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: error.response.data.msg,
+      });
+    }
+  };

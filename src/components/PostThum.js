@@ -12,6 +12,20 @@ const PostThum = ({ posts, result }) => {
       {posts.map((post) => (
         <Link key={post._id} to={`/post/${post._id}`}>
           <div className="post_thum_display">
+            {post.images[0].url.match(/video/i) ? (
+              <video
+                controls
+                src={post.images[0].url}
+                alt={post.images[0].url}
+                style={{ filter: theme ? "invert(1)" : "invert(0)" }}
+              />
+            ) : (
+              <img
+                src={post.images[0].url}
+                alt={post.images[0].url}
+                style={{ filter: theme ? "invert(1)" : "invert(0)" }}
+              />
+            )}
             <img
               src={post.images[0].url}
               alt={post.images[0].url}
