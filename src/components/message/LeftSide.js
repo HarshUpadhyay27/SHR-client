@@ -10,7 +10,7 @@ import UserCard from "../UserCard";
 import { useHistory, useParams } from "react-router-dom";
 
 const LeftSide = () => {
-  const { auth, message } = useSelector((state) => state);
+  const { auth, message, online } = useSelector((state) => state);
   const dispatch = useDispatch();
 
   const [search, setSearch] = useState("");
@@ -80,6 +80,13 @@ const LeftSide = () => {
     }
   }, [message.resultUsers, auth, page, dispatch]);
 
+  // Check User Online - Offline
+  useEffect(() => {
+    if (message.firstLoad) {
+      dispatch({ type: MESS_TYPES.CHECK_ONLINE_OFFLINE, payload: online });
+    }
+  }, [message.firstLoad, online]);
+
   return (
     <>
       <form className="message-header" onSubmit={handleSearch}>
@@ -115,7 +122,13 @@ const LeftSide = () => {
                 onClick={() => handleAddUser(user)}
               >
                 <UserCard user={user} msg={true}>
-                  <i className="fas fa-circle" />
+                  {user.online ? (
+                    <i className="fas fa-circle text-success" />
+                  ) : (
+                    auth.user.following.find(
+                      (item) => item.id === user._id
+                    ) && <i className="fas fa-circle" />
+                  )}
                 </UserCard>
               </div>
             ))}

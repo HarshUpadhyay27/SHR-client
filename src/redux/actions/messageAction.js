@@ -9,6 +9,7 @@ export const MESS_TYPES = {
   UPDATE_MESSAGES: "UPDATE_MESSAGES",
   DELETE_MESSAGES: "DELETE_MESSAGES",
   DELETE_CONVERSATIONS: "DELETE_CONVERSATIONS",
+  CHECK_ONLINE_OFFLINE: "CHECK_ONLINE_OFFLINE"
 };
 
 // export const addUser =
@@ -32,7 +33,7 @@ export const addMessage =
       ...msg,
       user: { _id, avatar, fullname, username },
     });
-    
+
     try {
       await postDataApi("message", msg, auth.token);
     } catch (error) {
