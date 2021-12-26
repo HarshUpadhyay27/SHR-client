@@ -18,6 +18,7 @@ import io from "socket.io-client";
 import { GLOBALTYPES } from "./redux/actions/globalType";
 import { getNotifies } from "./redux/actions/notifyAction";
 import CallModal from "./components/message/CallModal";
+import Peer from "peerjs";
 
 const App = () => {
   const { auth, status, modal, call } = useSelector((state) => state);
@@ -48,6 +49,14 @@ const App = () => {
         }
       });
     }
+  }, []);
+
+  useEffect(() => {
+    const newPeer = new Peer(undefined, {
+      host: "/",
+      port: "3001",
+    });
+    dispatch({ type: GLOBALTYPES.PEER, payload: newPeer });
   }, []);
 
   return (

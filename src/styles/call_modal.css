@@ -41,5 +41,6 @@
   cursor: pointer;
 }
 .call_modal .timer{
-    transform: translateY(15px);
+    transform: translateY(-15px);
+    margin-top: 15px;
 }

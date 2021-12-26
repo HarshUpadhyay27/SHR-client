@@ -85,7 +85,7 @@ const LeftSide = () => {
     if (message.firstLoad) {
       dispatch({ type: MESS_TYPES.CHECK_ONLINE_OFFLINE, payload: online });
     }
-  }, [message.firstLoad, online]);
+  }, [message.firstLoad, online, dispatch]);
 
   return (
     <>
